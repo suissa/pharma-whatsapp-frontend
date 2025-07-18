@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* WhatsApp Custom Colors */
+@layer utilities {
+  .bg-whatsapp-bg {
+    background-color: #e5ddd5;
+  }
+  
+  .border-whatsapp-border {
+    border-color: #e9edef;
+  }
+  
+  .text-whatsapp-green {
+    color: #25d366;
+  }
+  
+  .bg-whatsapp-green {
+    background-color: #25d366;
+  }
+  
+  .focus\:ring-whatsapp-green:focus {
+    --tw-ring-color: #25d366;
+  }
+  
+  .hover\:bg-whatsapp-green:hover {
+    background-color: #1eab56;
+  }
+}
+
+/* Custom styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Force center logo styles */
+.logo-center-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  text-align: center !important;
+  position: relative !important;
+}
+
+.logo-center-container img {
+  display: block !important;
+  margin: 0 auto !important;
+  width: 100px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+/* Força centralização absoluta */
+.absolute-center {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+/* Estilos para mensagens de grupo */
+.sender-name {
+  color: #075e54 !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  margin-bottom: 4px !important;
+  background: rgba(37, 211, 102, 0.1) !important;
+  border-radius: 4px 4px 0 0 !important;
+  padding: 4px 8px 2px 8px !important;
+}
+
+.message-bubble.received .sender-name {
+  color: #075e54 !important;
+  background: rgba(37, 211, 102, 0.1) !important;
+}
+
+.message-bubble.received {
+  background: #ffffff;
+  border-radius: 0 8px 8px 8px;
+  box-shadow: 0 1px 0.5px rgba(0,0,0,.13);
+}
+
+.message-bubble.sent {
+  background: #dcf8c6;
+  border-radius: 8px 0 8px 8px;
+  box-shadow: 0 1px 0.5px rgba(0,0,0,.13);
+}
+
+.contact-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.contact-last-message {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Estilos do formulário de conexão */
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background-color: #25d366;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #1eab56;
+}
+
+.btn-primary:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+}
+
+.status {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.status-info {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.status-error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+.qrcode-section {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.qrcode-container {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.qrcode-container img {
+  max-width: 256px;
+  width: 100%;
+  height: auto;
+}
+
+.qrcode-instructions {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.success-section {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #f0fdf4;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.success-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #25d366;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estilos para logos */
+.logo-main {
+  width: 100px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.logo-small {
+  width: 100%;
+  max-width: 140px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* Responsividade para logos - tamanho fixo 100px */
+@media (max-width: 768px) {
+  .logo-main {
+    width: 100px;
+  }
+  
+  .logo-small {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-main {
+    width: 100px;
+  }
+  
+  .logo-small {
+    max-width: 60px;
+  }
+}

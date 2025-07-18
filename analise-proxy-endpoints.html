@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise: Problema de Endpoints - Proxy Vite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .logo {
+            width: 40vw;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 1.8rem;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        h3 {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin: 25px 0 10px 0;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .status-success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .endpoint-test {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .endpoint-success {
+            border-left-color: #28a745;
+        }
+
+        .endpoint-error {
+            border-left-color: #dc3545;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .test-result {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .test-result h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .summary {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .next-steps {
+            background: #f3e5f5;
+            border: 1px solid #e1bee7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .next-steps ul {
+            margin-left: 20px;
+        }
+
+        .next-steps li {
+            margin: 8px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="Logo" class="logo">
+            <h1>Análise: Problema de Endpoints</h1>
+            <p>Configuração do Proxy Vite e Descoberta de Endpoints</p>
+        </div>
+
+        <div class="summary">
+            <h2>📋 Resumo Executivo</h2>
+            <p><strong>Problema:</strong> Erro "Endpoint não encontrado. Verifique a URL da API." ao tentar criar sessões WhatsApp.</p>
+            <p><strong>Descoberta:</strong> O proxy do Vite está funcionando corretamente, mas os endpoints esperados pelo frontend não existem no backend.</p>
+            <p><strong>Status:</strong> 🔍 Análise em andamento - Endpoints do backend precisam ser identificados.</p>
+        </div>
+
+        <h2>🔧 Configuração Atual</h2>
+        
+        <div class="card status-info">
+            <h3>Proxy Vite (vite.config.ts)</h3>
+            <div class="code-block">
+server: {
+  host: "::",
+  port: 8083,
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      changeOrigin: true,
+      secure: false,
+      configure: (proxy, _options) => {
+        proxy.on('proxyReq', (proxyReq, req, _res) => {
+          console.log('🔄 Proxy:', req.method, req.url, '→', proxyReq.getHeader('host'));
+        });
+      }
+    }
+  }
+}
+            </div>
+            <p><strong>Status:</strong> ✅ Funcionando corretamente</p>
+        </div>
+
+        <div class="card status-info">
+            <h3>Configuração da API (src/config.ts)</h3>
+            <div class="code-block">
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            </div>
+            <p><strong>Status:</strong> ✅ Configuração correta</p>
+        </div>
+
+        <h2>🧪 Testes Realizados</h2>
+
+        <div class="grid">
+            <div class="test-result">
+                <h4>✅ Serviços Ativos</h4>
+                <p><strong>Backend:</strong> Porta 3000 (PID: 94623)</p>
+                <p><strong>Frontend:</strong> Porta 8083 (PID: 66500)</p>
+                <p><strong>Status:</strong> Ambos rodando normalmente</p>
+            </div>
+
+            <div class="test-result">
+                <h4>✅ Proxy Funcionando</h4>
+                <p><strong>Teste:</strong> GET /api/sessions via proxy</p>
+                <p><strong>Resultado:</strong> Redirecionamento correto para backend</p>
+                <p><strong>Resposta:</strong> {"success":true,"sessions":[],"total":0}</p>
+            </div>
+
+            <div class="test-result">
+                <h4>✅ Endpoint Health</h4>
+                <p><strong>Teste:</strong> GET /api/health</p>
+                <p><strong>Resultado:</strong> Endpoint disponível</p>
+                <p><strong>Info:</strong> activeSessions: 0, sessionIds: []</p>
+            </div>
+        </div>
+
+        <h2>❌ Endpoints Não Encontrados</h2>
+
+        <div class="endpoint-test endpoint-error">
+            <h4>POST /api/sessions/create</h4>
+            <p><strong>Status:</strong> ❌ Não existe</p>
+            <p><strong>Erro:</strong> Cannot POST /api/sessions/create</p>
+            <p><strong>Uso no Frontend:</strong> Hook useWhatsAppAPI.ts linha 108</p>
+        </div>
+
+        <div class="endpoint-test endpoint-error">
+            <h4>POST /api/sessions</h4>
+            <p><strong>Status:</strong> ❌ Não existe</p>
+            <p><strong>Erro:</strong> Cannot POST /api/sessions</p>
+        </div>
+
+        <div class="endpoint-test endpoint-error">
+            <h4>POST /api/instances</h4>
+            <p><strong>Status:</strong> ❌ Não existe</p>
+            <p><strong>Erro:</strong> Cannot POST /api/instances</p>
+        </div>
+
+        <div class="endpoint-test endpoint-error">
+            <h4>POST /api/session</h4>
+            <p><strong>Status:</strong> ❌ Não existe</p>
+            <p><strong>Erro:</strong> Cannot POST /api/session</p>
+        </div>
+
+        <div class="endpoint-test endpoint-error">
+            <h4>POST /api/init</h4>
+            <p><strong>Status:</strong> ❌ Não existe</p>
+            <p><strong>Erro:</strong> Cannot POST /api/init</p>
+        </div>
+
+        <h2>🔍 Análise Técnica</h2>
+
+        <div class="card status-warning">
+            <h3>Problema Identificado</h3>
+            <p>O frontend está tentando usar endpoints que não existem no backend:</p>
+            <ul>
+                <li><strong>Frontend espera:</strong> POST /api/sessions/create</li>
+                <li><strong>Backend oferece:</strong> Apenas GET /api/sessions e GET /api/health</li>
+                <li><strong>Gap:</strong> Endpoints de criação de sessão não implementados</li>
+            </ul>
+        </div>
+
+        <div class="card status-info">
+            <h3>Endpoints Disponíveis no Backend</h3>
+            <div class="code-block">
+✅ GET /api/sessions - Lista sessões existentes
+✅ GET /api/health - Status da API e informações do sistema
+❌ POST /api/sessions/create - Não implementado
+❌ POST /api/sessions - Não implementado
+❌ DELETE /api/sessions/{id} - Não implementado
+❌ GET /api/sessions/{id}/qrcode - Não implementado
+❌ GET /api/sessions/{id}/qrcode/image - Não implementado
+            </div>
+        </div>
+
+        <h2>📊 Dados do Sistema</h2>
+
+        <div class="card">
+            <h3>Informações do Backend (/api/health)</h3>
+            <div class="response">{
+  "success": true,
+  "message": "API funcionando",
+  "timestamp": "2025-07-17T12:16:36.989Z",
+  "status": "healthy",
+  "activeSessions": 0,
+  "sessionIds": [],
+  "uptime": 209.237192669,
+  "memory": {
+    "rss": 83644416,
+    "heapTotal": 27328512,
+    "heapUsed": 26272232,
+    "external": 3498487,
+    "arrayBuffers": 133099
+  },
+  "version": "1.0.3"
+}</div>
+        </div>
+
+        <h2>🎯 Próximos Passos</h2>
+
+        <div class="next-steps">
+            <h3>Ações Necessárias</h3>
+            <ol>
+                <li><strong>Verificar Documentação do Backend:</strong> Consultar README ou documentação da API para identificar os endpoints corretos</li>
+                <li><strong>Implementar Endpoints Faltantes:</strong> Adicionar no backend os endpoints de criação de sessão</li>
+                <li><strong>Atualizar Frontend:</strong> Ajustar URLs dos endpoints conforme implementação do backend</li>
+                <li><strong>Testar Fluxo Completo:</strong> Validar criação → QR Code → conexão → envio de mensagens</li>
+            </ol>
+
+            <h3>Endpoints Necessários</h3>
+            <ul>
+                <li><code>POST /api/sessions/create</code> - Criar nova sessão WhatsApp</li>
+                <li><code>GET /api/sessions/{id}/qrcode</code> - Obter QR Code da sessão</li>
+                <li><code>GET /api/sessions/{id}/qrcode/image</code> - Obter QR Code como imagem</li>
+                <li><code>DELETE /api/sessions/{id}</code> - Deletar sessão</li>
+                <li><code>GET /api/sessions/{id}</code> - Status da sessão</li>
+            </ul>
+        </div>
+
+        <div class="card status-success">
+            <h3>✅ Conclusões</h3>
+            <ul>
+                <li><strong>Proxy Vite:</strong> Configurado e funcionando corretamente</li>
+                <li><strong>Backend:</strong> Rodando na porta 3000 e respondendo</li>
+                <li><strong>Frontend:</strong> Configurado corretamente</li>
+                <li><strong>Problema:</strong> Endpoints de criação de sessão não implementados no backend</li>
+                <li><strong>Solução:</strong> Implementar endpoints faltantes ou ajustar frontend para usar endpoints existentes</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>📝 Logs de Teste</h3>
+            <div class="response"># Teste do proxy
+curl -v http://localhost:8083/api/sessions
+→ Redirecionado para localhost:3000
+→ Resposta: {"success":true,"sessions":[],"total":0}
+
+# Teste endpoint de criação (falha)
+curl -X POST http://localhost:8083/api/sessions/create
+→ Erro: Cannot POST /api/sessions/create
+
+# Teste endpoint health (sucesso)
+curl http://localhost:3000/api/health
+→ Resposta: API funcionando, activeSessions: 0</div>
+        </div>
+
+        <div class="card">
+            <h3>🔗 Links de Referência</h3>
+            <ul>
+                <li><a href="https://vitejs.dev/config/server-options.html#server-proxy" target="_blank">Documentação Proxy Vite</a></li>
+                <li><a href="https://expressjs.com/en/guide/routing.html" target="_blank">Express.js Routing</a></li>
+                <li><a href="https://axios-http.com/docs/api_intro" target="_blank">Axios HTTP Client</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

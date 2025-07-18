@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Mensagem Sumindo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            margin: 8px 0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message-bubble.sent {
+            background: #d9fdd3;
+            align-self: flex-end;
+            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+            margin-left: auto;
+        }
+
+        .message-bubble.local {
+            background: #d9fdd3;
+            align-self: flex-end;
+            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+            margin-left: auto;
+            opacity: 0.8;
+            border: 2px dashed #25d366;
+        }
+
+        .message-bubble.received {
+            background: white;
+            align-self: flex-start;
+            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+            margin-right: auto;
+        }
+
+        .message-content {
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #667781;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .text-content {
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .problem-analysis {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #dc2626;
+        }
+
+        .problem-analysis h3 {
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+
+        .timeline {
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #25d366;
+        }
+
+        .timeline-time {
+            font-weight: bold;
+            color: #25d366;
+            margin-right: 15px;
+            min-width: 60px;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-sent {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-local {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-disappeared {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-confirmed {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .solution {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0fdf4;
+            border-radius: 8px;
+            border-left: 4px solid #059669;
+        }
+
+        .solution h3 {
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .before, .after {
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .before {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+        }
+
+        .before h4 {
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+
+        .after {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+        }
+
+        .after h4 {
+            color: #059669;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚠️ Teste - Mensagem Sumindo</h1>
+            <p>Demonstração do problema e da solução implementada</p>
+        </div>
+
+        <div class="content">
+            <div class="chat-container">
+                <!-- Simulação do problema -->
+                <div class="message-bubble sent">
+                    <div class="message-content">
+                        <div class="text-content">
+                            Olá! Como posso ajudar?
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        11:30
+                    </div>
+                </div>
+
+                <div class="message-bubble received">
+                    <div class="message-content">
+                        <div class="text-content">
+                            Qual o melhor remédio para infecção urinária?
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        11:31
+                    </div>
+                </div>
+
+                <!-- Mensagem local (aparece imediatamente) -->
+                <div class="message-bubble local">
+                    <div class="message-content">
+                        <div class="text-content">
+                            Qual o melhor remédio para infecção urinária?
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        11:32 ⏳
+                    </div>
+                </div>
+
+                <!-- Mensagem de IA -->
+                <div class="message-bubble received">
+                    <div class="message-content">
+                        <div class="text-content">
+                            Olá! 😊 O tratamento para infecção urinária geralmente inclui antibióticos...
+                        </div>
+                    </div>
+                    <div class="message-time">
+                        11:33
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-analysis">
+                <h3>🔍 Análise do Problema</h3>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-time">11:32</div>
+                        <div class="timeline-content">
+                            <strong>Usuário envia mensagem</strong><br>
+                            "Qual o melhor remédio para infecção urinária?"
+                        </div>
+                        <div class="timeline-status status-sent">Enviada</div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">11:32</div>
+                        <div class="timeline-content">
+                            <strong>Mensagem local adicionada</strong><br>
+                            Aparece imediatamente no chat com indicador ⏳
+                        </div>
+                        <div class="timeline-status status-local">Local</div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">11:35</div>
+                        <div class="timeline-content">
+                            <strong>Timeout de 3 segundos</strong><br>
+                            Mensagem local é removida automaticamente
+                        </div>
+                        <div class="timeline-status status-disappeared">Sumiu!</div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">11:36</div>
+                        <div class="timeline-content">
+                            <strong>Confirmação do servidor</strong><br>
+                            WebSocket confirma recebimento da mensagem
+                        </div>
+                        <div class="timeline-status status-confirmed">Confirmada</div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>💡 Problema:</strong> A mensagem local era removida após 3 segundos, causando confusão quando a confirmação do servidor demorava mais que isso.
+                </div>
+            </div>
+
+            <div class="solution">
+                <h3>✅ Solução Implementada</h3>
+                
+                <div class="comparison">
+                    <div class="before">
+                        <h4>❌ Antes da Correção</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Timeout fixo de 3 segundos</li>
+                            <li>Mensagem removida independente da confirmação</li>
+                            <li>Usuário vê mensagem sumir</li>
+                            <li>Experiência confusa</li>
+                        </ul>
+                    </div>
+                    
+                                         <div class="after">
+                         <h4>✅ Após a Correção</h4>
+                         <ul style="margin-left: 20px;">
+                             <li>NENHUMA mensagem é removida</li>
+                             <li>Mensagens ficam no chat permanentemente</li>
+                             <li>Histórico completo preservado</li>
+                             <li>Experiência consistente</li>
+                         </ul>
+                     </div>
+                </div>
+
+                                 <h4>🔧 Código da Correção</h4>
+                 <div class="code-example">
+// Antes: Remoção automática após 3 segundos
+setTimeout(() => {
+  setLocalMessages(prev => prev.filter(msg => 
+    msg.contact !== toField || !msg.isLocal
+  ));
+}, 3000);
+
+// Depois: NENHUMA remoção - mensagens ficam permanentemente
+// NÃO REMOVER MENSAGENS ENVIADAS - Elas ficam no chat permanentemente
+console.log('✅ Mensagem enviada e adicionada ao chat permanentemente');
+                 </div>
+
+                                 <h4>🔄 Preservação Permanente</h4>
+                 <div class="code-example">
+// Quando mensagem é confirmada pelo servidor
+if (!messageExists) {
+  conversation.messages.push(newMessage);
+  
+  // NÃO REMOVER MENSAGENS LOCAIS - Elas ficam no chat permanentemente
+  console.log('✅ Mensagem do servidor adicionada, mantendo mensagem local');
+}
+                 </div>
+            </div>
+
+            <div class="solution">
+                <h3>📊 Benefícios da Correção</h3>
+                
+                <div class="comparison">
+                    <div class="before">
+                        <h4>🎯 Problemas Resolvidos</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Mensagens não somem mais</li>
+                            <li>Feedback visual consistente</li>
+                            <li>Melhor experiência do usuário</li>
+                            <li>Confiança no envio</li>
+                        </ul>
+                    </div>
+                    
+                                         <div class="after">
+                         <h4>🚀 Melhorias Implementadas</h4>
+                         <ul style="margin-left: 20px;">
+                             <li>Preservação permanente de mensagens</li>
+                             <li>Nenhuma remoção automática</li>
+                             <li>Histórico completo mantido</li>
+                             <li>Experiência consistente</li>
+                         </ul>
+                     </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>💡 Resultado:</strong> Agora as mensagens NUNCA são removidas do chat, garantindo que o usuário sempre veja todas as suas mensagens enviadas.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

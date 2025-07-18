@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção: Posicionamento das Mensagens no Chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .logo {
+            width: 40vw;
+            max-width: 200px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            margin: 20px 0 10px;
+            font-size: 1.2rem;
+        }
+        
+        .problem {
+            background: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .solution {
+            background: #f0fff4;
+            border-left: 4px solid #38a169;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .steps {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .step {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .step:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .technical-details {
+            background: #e3f2fd;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .file-path {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 4px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                width: 60vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="/logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+            <h1>Correção: Posicionamento das Mensagens no Chat</h1>
+            <p class="subtitle">Sistema WhatsApp Frontend - Pharma Chat Bot</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>🔍 Problema Identificado</h2>
+                <div class="problem">
+                    <h3>Mensagens Enviadas Aparecendo no Lado Errado</h3>
+                    <p>As mensagens enviadas pelo usuário estavam aparecendo no lado esquerdo do chat (como se fossem mensagens recebidas) em vez de aparecerem no lado direito (como mensagens enviadas).</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🔧 Análise Técnica</h2>
+                <div class="technical-details">
+                    <h3>Como o Sistema Funciona</h3>
+                    <p>O sistema de chat utiliza classes CSS para posicionar as mensagens:</p>
+                    <ul>
+                        <li><strong>.message-bubble.sent</strong> → Mensagens enviadas (lado direito)</li>
+                        <li><strong>.message-bubble.received</strong> → Mensagens recebidas (lado esquerdo)</li>
+                    </ul>
+                    
+                    <p>A classe é determinada pela propriedade <span class="highlight">fromMe</span> da mensagem:</p>
+                    <div class="code-block">
+// No componente MessageBubble.tsx
+const isFromMe = message.fromMe || message.originalMessage?.key?.fromMe;
+
+if (isFromMe) {
+    classes += ' sent';  // Lado direito
+} else {
+    classes += ' received';  // Lado esquerdo
+}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🐛 Causa do Problema</h2>
+                <div class="problem">
+                    <p>Na função <span class="highlight">sendMessage</span> do hook <span class="highlight">useMessages</span>, as mensagens locais estavam sendo criadas com:</p>
+                    <div class="code-block">
+const localMessage = {
+    messageId: `local_${Date.now()}_${Math.random()}`,
+    content: message.trim(),
+    fromUser: selectedContact,  // ❌ ERRADO: deveria ser 'me'
+    toUser: 'me',              // ❌ ERRADO: deveria ser selectedContact
+    timestamp: new Date().toISOString(),
+    messageType: 'text',
+    isLocal: true
+};
+                    </div>
+                    
+                    <p><strong>Problema:</strong> A mensagem estava sendo marcada como enviada <strong>pelo contato</strong> em vez de ser enviada <strong>por mim</strong>.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>✅ Solução Implementada</h2>
+                <div class="solution">
+                    <h3>Correção na Criação de Mensagens Locais</h3>
+                    <div class="file-path">src/hooks/useMessages.ts</div>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <strong>Corrigir propriedades da mensagem local:</strong>
+                            <div class="code-block">
+const localMessage = {
+    messageId: `local_${Date.now()}_${Math.random()}`,
+    content: message.trim(),
+    fromUser: 'me',                    // ✅ CORRETO: enviada por mim
+    toUser: selectedContact,           // ✅ CORRETO: enviada para o contato
+    timestamp: new Date().toISOString(),
+    messageType: 'text',
+    isLocal: true,
+    fromMe: true                       // ✅ NOVO: flag explícita
+};
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <strong>Corrigir filtro de mensagens locais:</strong>
+                            <div class="code-block">
+// Antes: mensagens locais do contato
+const localMessagesForContact = localMessages.filter(m => m.fromUser === contact);
+
+// Depois: mensagens locais enviadas por mim para este contato
+const localMessagesForContact = localMessages.filter(m => 
+    m.toUser === contact && m.fromUser === 'me'
+);
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🎯 Resultado</h2>
+                <div class="solution">
+                    <h3>Comportamento Corrigido</h3>
+                    <ul>
+                        <li>✅ <strong>Mensagens enviadas pelo usuário</strong> aparecem no lado direito (verde)</li>
+                        <li>✅ <strong>Mensagens recebidas de outros</strong> aparecem no lado esquerdo (branco)</li>
+                        <li>✅ <strong>Mensagens locais</strong> são posicionadas corretamente</li>
+                        <li>✅ <strong>Sem duplicação</strong> de mensagens</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>📋 Arquivos Modificados</h2>
+                <div class="file-path">src/hooks/useMessages.ts</div>
+                <ul>
+                    <li><strong>Linha ~350:</strong> Correção na criação de mensagens locais</li>
+                    <li><strong>Linha ~420:</strong> Correção no filtro de mensagens combinadas</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>🔗 Referências Técnicas</h2>
+                <div class="technical-details">
+                    <h3>CSS Responsável pelo Posicionamento</h3>
+                    <div class="file-path">src/App.css</div>
+                    <div class="code-block">
+.message-bubble.received {
+    background: white;
+    align-self: flex-start;  /* Lado esquerdo */
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+}
+
+.message-bubble.sent {
+    background: #d9fdd3;     /* Verde claro */
+    align-self: flex-end;    /* Lado direito */
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

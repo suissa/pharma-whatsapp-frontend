@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Mensagem de Imagem</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e5ddd5;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-center-container {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            text-align: center !important;
+            position: relative !important;
+            margin-bottom: 30px;
+        }
+        
+        .logo-center-container img {
+            display: block !important;
+            margin: 0 auto !important;
+            width: 200px !important;
+            height: auto !important;
+            object-fit: contain !important;
+            object-position: center !important;
+        }
+        
+        h1 {
+            color: #25D366;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .test-message {
+            background: #d9fdd3;
+            border-radius: 8px 0 8px 8px;
+            padding: 12px;
+            margin: 20px 0;
+            max-width: 70%;
+            align-self: flex-end;
+            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+        }
+        
+        .image-message {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .image-message img {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+        }
+        
+        .image-message img:hover {
+            transform: scale(1.02);
+        }
+        
+        .image-caption {
+            font-size: 0.875rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            padding: 4px 0;
+            color: #333;
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            color: #667781;
+            text-align: right;
+            margin-top: 4px;
+        }
+        
+        .test-info {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .test-info h3 {
+            color: #25D366;
+            margin-top: 0;
+        }
+        
+        .test-info pre {
+            background: #f1f3f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .status-error {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="logo-center-container">
+            <img src="/logo.png" alt="Pharma Chat Bot" onError="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div style="display: none; font-size: 2rem; font-weight: bold; color: #333;">🤖 PHARMA CHAT BOT</div>
+        </div>
+        
+        <h1>Teste - Exibição de Mensagens de Imagem</h1>
+        
+        <div class="test-info">
+            <h3>📋 Informações do Teste</h3>
+            <p>Este teste simula uma mensagem de imagem recebida via WebSocket com o formato:</p>
+            <pre>{
+  "messageType": "image",
+  "mediaInfo": {
+    "publicUrl": "http://localhost:3001/media/imagem.jpg",
+    "caption": "Legenda da imagem (opcional)"
+  }
+}</pre>
+        </div>
+        
+        <div class="test-message">
+            <div class="image-message">
+                <img 
+                    src="https://via.placeholder.com/400x300/25D366/FFFFFF?text=Teste+Imagem" 
+                    alt="Imagem de teste"
+                    onError="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                />
+                <div style="display: none; color: #666; text-align: center; padding: 20px;">
+                    📷 Imagem não disponível
+                </div>
+                <div class="image-caption">
+                    Esta é uma legenda de exemplo para a imagem de teste
+                </div>
+            </div>
+            <div class="message-time">
+                14:30
+            </div>
+        </div>
+        
+        <div class="test-info">
+            <h3>✅ Funcionalidades Implementadas</h3>
+            <ul>
+                <li>✅ Detecção automática de <code>messageType: "image"</code></li>
+                <li>✅ Exibição da imagem usando <code>message.mediaInfo.publicUrl</code></li>
+                <li>✅ Suporte a legendas (caption) da imagem</li>
+                <li>✅ Tratamento de erro se a imagem não carregar</li>
+                <li>✅ Estilos responsivos e hover effects</li>
+                <li>✅ Integração com o sistema de mensagens existente</li>
+            </ul>
+        </div>
+        
+        <div class="status status-success">
+            ✅ Teste de exibição de imagem implementado com sucesso!
+        </div>
+        
+        <div class="test-info">
+            <h3>🔗 Links de Referência</h3>
+            <ul>
+                <li><strong>Componente MessageBubble:</strong> <code>src/components/ui/MessageBubble.tsx</code></li>
+                <li><strong>Estilos CSS:</strong> <code>src/App.css</code> (seção de mensagens de imagem)</li>
+                <li><strong>Hook useMessages:</strong> <code>src/hooks/useMessages.ts</code></li>
+                <li><strong>Formato da mensagem:</strong> WebSocket com <code>messageType: "image"</code></li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Simular carregamento de imagem
+        console.log('🧪 Teste de mensagem de imagem carregado');
+        
+        // Verificar se a imagem carregou
+        const testImage = document.querySelector('.image-message img');
+        if (testImage) {
+            testImage.addEventListener('load', () => {
+                console.log('✅ Imagem carregada com sucesso');
+            });
+            
+            testImage.addEventListener('error', () => {
+                console.log('❌ Erro ao carregar imagem');
+            });
+        }
+    </script>
+</body>
+</html> 

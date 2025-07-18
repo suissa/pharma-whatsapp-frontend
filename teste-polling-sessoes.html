@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste: Polling de Sessões Conectadas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .logo {
+            width: 40vw;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 1.8rem;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        h3 {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin: 25px 0 10px 0;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .status-success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .test-link {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+
+        .test-link:hover {
+            background: #0056b3;
+        }
+
+        .test-link.success {
+            background: #28a745;
+        }
+
+        .test-link.success:hover {
+            background: #218838;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .test-case {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .test-case h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .flow-diagram {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+
+        .flow-step.success {
+            border-left-color: #28a745;
+        }
+
+        .step-number {
+            background: #007bff;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .step-number.success {
+            background: #28a745;
+        }
+
+        .api-response {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="Logo" class="logo">
+            <h1>Teste: Polling de Sessões Conectadas</h1>
+            <p>Detecção Automática de Sessões WhatsApp Conectadas</p>
+        </div>
+
+        <div class="card status-success">
+            <h2>✅ Funcionalidade Implementada</h2>
+            <p>A página inicial agora faz polling contínuo da API <code>/api/sessions</code> até encontrar uma sessão conectada e redirecionar automaticamente para o chat.</p>
+        </div>
+
+        <h2>🔄 Como Funciona o Polling</h2>
+
+        <div class="flow-diagram">
+            <div class="flow-step">
+                <div class="step-number">1</div>
+                <div>
+                    <strong>Página Inicial:</strong> Faz requisição inicial para <code>/api/sessions</code>
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="step-number">2</div>
+                <div>
+                    <strong>Se não encontrar sessão:</strong> Inicia polling a cada 5 segundos
+                </div>
+            </div>
+
+            <div class="flow-step">
+                <div class="step-number">3</div>
+                <div>
+                    <strong>Polling contínuo:</strong> Verifica <code>/api/sessions</code> repetidamente
+                </div>
+            </div>
+
+            <div class="flow-step success">
+                <div class="step-number success">4</div>
+                <div>
+                    <strong>Quando encontrar sessão conectada:</strong> Para o polling e redireciona
+                </div>
+            </div>
+
+            <div class="flow-step success">
+                <div class="step-number success">5</div>
+                <div>
+                    <strong>Redirecionamento:</strong> Navega para <code>/{sessionId}</code> automaticamente
+                </div>
+            </div>
+        </div>
+
+        <h2>📊 Estrutura da Resposta Esperada</h2>
+
+        <div class="card">
+            <h3>GET /api/sessions</h3>
+            <div class="api-response">{
+  "success": true,
+  "sessions": [
+    {
+      "sessionId": "artrrtyyyu",
+      "status": "connected",
+      "user": {
+        "id": "5515991957645:34@s.whatsapp.net"
+      }
+    }
+  ],
+  "total": 1
+}</div>
+            <p><strong>Processamento:</strong> O código procura por <code>session.status === 'connected'</code></p>
+        </div>
+
+        <h2>🔧 Implementação Técnica</h2>
+
+        <div class="card status-info">
+            <h3>1. Polling de Sessões</h3>
+            <div class="code-block">
+// Função para fazer polling contínuo de sessões conectadas
+const startSessionsPolling = () => {
+  console.log('🔄 Iniciando polling de sessões conectadas...');
+  
+  sessionsPollingRef.current = setInterval(async () => {
+    try {
+      const response = await fetch('/api/sessions');
+      const data = await response.json();
+      
+      if (data.success && data.sessions && data.sessions.length > 0) {
+        // Procurar por sessão conectada
+        const connectedSession = data.sessions.find((session: any) => 
+          session.status === 'connected'
+        );
+        
+        if (connectedSession && !isConnected) {
+          console.log('✅ Sessão conectada encontrada via polling:', connectedSession.sessionId);
+          setConnectedInstanceId(connectedSession.sessionId);
+          setIsConnected(true);
+          clearSessionsPolling(); // Parar polling quando encontrar
+        }
+      }
+    } catch (err) {
+      console.error('❌ Erro no polling de sessões:', err);
+    }
+  }, 5000); // Verificar a cada 5 segundos
+};
+            </div>
+        </div>
+
+        <div class="card status-info">
+            <h3>2. Inicialização Automática</h3>
+            <div class="code-block">
+// Na inicialização da aplicação
+const checkExistingInstances = async () => {
+  // ... verificação inicial ...
+  
+  if (connectedSession) {
+    // Sessão já conectada
+    return connectedSession.sessionId;
+  } else {
+    // Nenhuma sessão encontrada - iniciar polling
+    startSessionsPolling();
+    return null;
+  }
+};
+            </div>
+        </div>
+
+        <div class="card status-info">
+            <h3>3. Redirecionamento Automático</h3>
+            <div class="code-block">
+// Quando sessão conectada é encontrada
+if (connectedSession && !isConnected) {
+  setConnectedInstanceId(connectedSession.sessionId);
+  setIsConnected(true);
+  
+  // Iniciar countdown para abrir chat
+  setAutoOpenCountdown(10);
+  // ... countdown logic ...
+  
+  // Navegar para a rota da instância
+  navigate(`/${connectedSession.sessionId}`);
+}
+            </div>
+        </div>
+
+        <h2>🧪 Testes de Funcionalidade</h2>
+
+        <div class="grid">
+            <div class="test-case">
+                <h4>✅ Teste 1: Polling Inicial</h4>
+                <p><strong>Cenário:</strong> Acessar página inicial sem sessão conectada</p>
+                <p><strong>Resultado:</strong> Inicia polling a cada 5 segundos</p>
+                <p><strong>Status:</strong> ✅ Implementado</p>
+            </div>
+
+            <div class="test-case">
+                <h4>✅ Teste 2: Detecção de Sessão</h4>
+                <p><strong>Cenário:</strong> Sessão conectada aparece durante polling</p>
+                <p><strong>Resultado:</strong> Para polling e redireciona automaticamente</p>
+                <p><strong>Status:</strong> ✅ Implementado</p>
+            </div>
+
+            <div class="test-case">
+                <h4>✅ Teste 3: Redirecionamento</h4>
+                <p><strong>Cenário:</strong> Sessão "artrrtyyyu" conectada</p>
+                <p><strong>Resultado:</strong> Navega para <code>/artrrtyyyu</code></p>
+                <p><strong>Status:</strong> ✅ Implementado</p>
+            </div>
+
+            <div class="test-case">
+                <h4>✅ Teste 4: Preservação de Mensagens</h4>
+                <p><strong>Cenário:</strong> Mensagens existentes no chat</p>
+                <p><strong>Resultado:</strong> Mensagens são mantidas (NÃO DELETADAS)</p>
+                <p><strong>Status:</strong> ✅ Garantido</p>
+            </div>
+        </div>
+
+        <h2>📝 Logs de Debug</h2>
+
+        <div class="card">
+            <h3>Logs Esperados no Console</h3>
+            <div class="code-block">
+🚀 Iniciando aplicação - verificando instâncias...
+🔍 Verificando sessões existentes...
+📨 Resposta do backend: {success: true, sessions: [], total: 0}
+📋 Nenhuma sessão ativa encontrada
+🔄 Iniciando polling de sessões conectadas...
+📨 Polling de sessões: {success: true, sessions: [], total: 0}
+📨 Polling de sessões: {success: true, sessions: [{sessionId: "artrrtyyyu", status: "connected"}]}
+✅ Sessão conectada encontrada via polling: artrrtyyyu
+🚀 Abrindo chat automaticamente após conexão...
+            </div>
+        </div>
+
+        <h2>🎯 Cenários de Teste</h2>
+
+        <div class="grid">
+            <div class="test-case">
+                <h4>✅ Cenário 1: Sessão Vazia → Conectada</h4>
+                <p><strong>Início:</strong> <code>{"sessions": [], "total": 0}</code></p>
+                <p><strong>Durante:</strong> Polling a cada 5 segundos</p>
+                <p><strong>Final:</strong> <code>{"sessions": [{"sessionId": "artrrtyyyu", "status": "connected"}]}</code></p>
+                <p><strong>Ação:</strong> Redireciona para <code>/artrrtyyyu</code></p>
+            </div>
+
+            <div class="test-case">
+                <h4>✅ Cenário 2: Múltiplas Sessões</h4>
+                <p><strong>Resposta:</strong> Várias sessões com diferentes status</p>
+                <p><strong>Processamento:</strong> Encontra a primeira com <code>status: "connected"</code></p>
+                <p><strong>Resultado:</strong> Usa a sessão conectada encontrada</p>
+            </div>
+
+            <div class="test-case">
+                <h4>✅ Cenário 3: Sessão Já Conectada</h4>
+                <p><strong>Início:</strong> Sessão já conectada na primeira verificação</p>
+                <p><strong>Processamento:</strong> Não inicia polling desnecessário</p>
+                <p><strong>Resultado:</strong> Redireciona imediatamente</p>
+            </div>
+        </div>
+
+        <div class="card status-success">
+            <h3>✅ Conclusões</h3>
+            <ul>
+                <li><strong>Polling Contínuo:</strong> Verifica sessões a cada 5 segundos</li>
+                <li><strong>Detecção Automática:</strong> Encontra sessões conectadas automaticamente</li>
+                <li><strong>Redirecionamento Inteligente:</strong> Navega para URL correta</li>
+                <li><strong>Preservação de Dados:</strong> Mensagens existentes são mantidas</li>
+                <li><strong>Performance Otimizada:</strong> Para polling quando encontra sessão</li>
+                <li><strong>Debug Completo:</strong> Logs detalhados para troubleshooting</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>🔗 Links de Teste</h3>
+            <div style="text-align: center;">
+                <a href="http://localhost:8083/" class="test-link success" target="_blank">🏠 Página Inicial (com polling)</a>
+                <a href="http://localhost:3000/api/sessions" class="test-link" target="_blank">🔍 API Sessões</a>
+                <a href="http://localhost:8083/artrrtyyyu" class="test-link success" target="_blank">💬 Chat Direto</a>
+            </div>
+        </div>
+
+        <div class="card status-warning">
+            <h3>⚠️ Importante</h3>
+            <p><strong>MENSAGENS NÃO SÃO DELETADAS!</strong> O sistema apenas detecta sessões conectadas e redireciona para o chat, mantendo todas as mensagens existentes intactas.</p>
+        </div>
+    </div>
+</body>
+</html> 
